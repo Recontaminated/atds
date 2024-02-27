@@ -1,5 +1,6 @@
 
 
+
 #! /usr/bin/env python3
 """
   program_name:atds.py 
@@ -92,3 +93,92 @@ class Queue(Generic[T]):
     def __len__(self) -> int:
         return self.size()
     
+
+class Node(Generic[T]):
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+    def __repr__(self):
+        return f"Node[data={self.data}, next={self.next}])"
+    def get_data(self):
+        return self.data
+    def get_next(self):
+        return self.next
+    def set_data(self, data):
+        self.data = data
+    def set_next(self, next): 
+        self.next = next
+    def __eq__(self, other):
+        return self.data == other.data
+class UnorderedList():
+    def __init__(self):
+        self.head = None
+    def add(self, item):
+        temp = Node(item)
+        temp.set_next(self.head)
+        self.head = temp
+    def length(self):
+        current = self.head
+        count = 0
+        while current != None:
+            count += 1
+            current = current.get_next()
+        return count
+    def search(self, item):
+        current = self.head
+        found = False
+        while current != None and not found:
+            if current.get_data() == item:
+                found = True
+            else:
+                current = current.get_anext()#type:ignore   
+        return found
+    
+  
+    
+class Deque(Generic[T]):
+    def __init__(self):
+        self.deque:List[T] = []
+    
+    def add_front(self, item:T) -> None:
+        self.deque.insert(0, item)
+    
+    def add_rear(self, item:T) -> None:
+        self.deque.append(item)
+    
+    def remove_front(self) -> Union[T,None]:
+        if self.deque:
+            return self.deque.pop(0)
+        return None
+    
+    def remove_rear(self) -> Union[T,None]:
+        if self.deque:
+            return self.deque.pop()
+        return None
+    
+    def peek_front(self) -> Union[T,None]:
+        if self.deque:
+            return self.deque[0]
+        return None
+    
+    def peek_rear(self) -> Union[T,None]:
+        if self.deque:
+            return self.deque[-1]
+        return None
+    
+    def size(self) -> int:
+        return len(self.deque)
+    
+    def is_empty(self) -> bool:
+        return self.size() == 0
+    
+    def __repr__(self) -> str:
+        return repr(self.deque)
+if __name__ == "__main__":
+    n = Node(1)
+    print(n)
+    n.set_next(Node(2))
+    print(n)
+    n.add(Node(3))
+    print(n)
+  
