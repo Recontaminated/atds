@@ -108,8 +108,7 @@ class Node(Generic[T]):
         self.data = data
     def set_next(self, next): 
         self.next = next
-    def __eq__(self, other):
-        return self.data == other.data
+
 class UnorderedList():
     def __init__(self):
         self.head = None
@@ -117,13 +116,17 @@ class UnorderedList():
         temp = Node(item)
         temp.set_next(self.head)
         self.head = temp
-    def length(self):
+    def is_empty(self):
+        return self.head == None
+    def pop(self, index=-1):
+        if index == -1:
+            index = self.length()-1
+        #removes the item at the index from the list and returns it 
         current = self.head
-        count = 0
-        while current != None:
-            count += 1
+        for i in range(index):
             current = current.get_next()
-        return count
+        data = current.get_data()
+        self.remove(data)
     def search(self, item):
         current = self.head
         found = False
@@ -131,8 +134,78 @@ class UnorderedList():
             if current.get_data() == item:
                 found = True
             else:
-                current = current.get_anext()#type:ignore   
+                current = current.get_next()#type:ignore   
         return found
+    def remove(self, item):
+       # remove all instances of item
+        current = self.head
+        previous = None
+
+        while current != None:
+
+            if current.get_data() == item:
+                if previous == None:
+                    print("removing head")
+                    self.head = current.get_next()
+                    previous = current
+                    current = current.get_next()
+                else:
+                    if current.get_data() == item:
+                        previous.set_next(current.get_next())
+                        current = current.get_next()
+            else:
+                previous = current
+                current = current.get_next()
+        
+
+    def length(self):
+        current = self.head
+        count = 0
+        while current != None:
+            count += 1
+            current = current.get_next()
+        return count
+    def insert(self, pos, item):
+        if pos == 0:
+            self.add(item)
+        else:
+            current = self.head
+
+            for i in range(pos-1):
+                current = current.get_next()
+            temp = Node(item)
+            temp.set_next(current.get_next())
+            current.set_next(temp)
+
+    def append(self, item):
+        current = self.head
+        while current.get_next() != None:
+            current = current.get_next()
+        temp = Node(item)
+        current.set_next(temp)
+
+    def index(self, item):
+        current = self.head
+        index = 0
+        while current != None:
+            if current.get_data() == item:
+                return index
+            else:
+                current = current.get_next()
+                index += 1
+        return None
+
+    def __repr__(self):
+        """Creates a representation of the list suitable for printing,
+        debugging.
+        """
+        result = "UnorderedList["
+        next_node = self.head
+        while next_node != None:
+            result += str(next_node.get_data()) + ","
+            next_node = next_node.get_next()
+        result = result + "]"
+        return result
     
   
     
