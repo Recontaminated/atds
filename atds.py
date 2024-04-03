@@ -289,3 +289,46 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+class HashTable(object):
+    def __init__(self, size) -> None:
+        self.slots = [None for i in range(size)]
+        self.data = [None for i in range(size)]
+
+    def __repr__(self) -> str:
+        return f"{self.data} | {self.slots}"
+        
+    def hash_function(self,key):
+        return key % len(self.slots)
+    
+    def transform_put_index(self,index):
+        """manages hash colisions"""
+        if self.data[index] == None:
+            return index
+        return self.transform_put_index(index+1)
+    
+    def transform_get_index(self,index,key):
+        while self.slots[index]!= key:
+            if self.slots[index] == None:
+                return -1
+            index +=1
+        return index
+    
+    def put(self, key,value):
+        index = self.hash_function(key)
+        index = self.transform_put_index(index)
+        self.slots[index] = key
+        self.data[index] = value
+    def get(self,key):
+        index = self.hash_function(key)
+        index = self.transform_get_index(index,key)
+        if index == -1:
+            return None
+        return self.data[index]
+    # def remove(self,index):
+    #     index = self.hash_function(key)
+        
+
+        
+
