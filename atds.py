@@ -330,5 +330,55 @@ class HashTable(object):
     #     index = self.hash_function(key)
         
 
-        
+ 
 
+
+import typing
+
+class BinaryTree(object):
+    def __init__(self,key):
+        self.children = [None,None]
+        self.value = key
+
+    def get_root_val(self):
+        return self.value
+
+    def set_root_val(self,new_val):
+        self.value = new_val
+
+    def get_left_child(self):
+        return self.children[0]
+
+    def get_right_child(self):
+        return self.children[1]
+
+    def insert_left(self, new_left_child):
+        if self.children[0] == None:
+            bt = BinaryTree(new_left_child)
+            self.children[0] = bt
+            return self
+        leftC = self.children[0]
+        newChild = BinaryTree(new_left_child)
+        newChild.children[0] = leftC
+        self.children[0]= newChild
+
+    def insert_right(self, new_right_child):
+
+        if self.children[1] == None:
+            bt = BinaryTree(new_right_child)
+            self.children[1] = bt
+            return self
+        
+        rightC = self.children[1]
+        newChild = BinaryTree(new_right_child)
+        newChild.children[1] = rightC
+        self.children[1]=newChild
+
+
+        self.children[1] = newChild
+    def __str__(self):
+        return f"BinaryTree[key={self.value},left_child={self.children[0]},right_child={self.children[1]}]"
+
+    def __repr__(self):
+        return f"BinaryTree[key={self.value},left_child={self.children[0]},right_child={self.children[1]}]"
+        
