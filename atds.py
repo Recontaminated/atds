@@ -334,16 +334,17 @@ class HashTable(object):
 
 
 import typing
+import typing
 
 class BinaryTree(object):
-    def __init__(self,key):
-        self.children = [None,None]
+    def __init__(self, key):
+        self.children = [None, None]
         self.value = key
 
     def get_root_val(self):
         return self.value
 
-    def set_root_val(self,new_val):
+    def set_root_val(self, new_val):
         self.value = new_val
 
     def get_left_child(self):
@@ -353,32 +354,134 @@ class BinaryTree(object):
         return self.children[1]
 
     def insert_left(self, new_left_child):
-        if self.children[0] == None:
-            bt = BinaryTree(new_left_child)
-            self.children[0] = bt
-            return self
-        leftC = self.children[0]
-        newChild = BinaryTree(new_left_child)
-        newChild.children[0] = leftC
-        self.children[0]= newChild
+        if self.children[0] is None:
+            self.children[0] = BinaryTree(new_left_child)
+        else:
+            new_child = BinaryTree(new_left_child)
+            new_child.children[0] = self.children[0]
+            self.children[0] = new_child
 
     def insert_right(self, new_right_child):
+        if self.children[1] is None:
+            self.children[1] = BinaryTree(new_right_child)
+        else:
+            new_child = BinaryTree(new_right_child)
+            new_child.children[1] = self.children[1]
+            self.children[1] = new_child
 
-        if self.children[1] == None:
-            bt = BinaryTree(new_right_child)
-            self.children[1] = bt
-            return self
-        
-        rightC = self.children[1]
-        newChild = BinaryTree(new_right_child)
-        newChild.children[1] = rightC
-        self.children[1]=newChild
-
-
-        self.children[1] = newChild
     def __str__(self):
         return f"BinaryTree[key={self.value},left_child={self.children[0]},right_child={self.children[1]}]"
 
     def __repr__(self):
         return f"BinaryTree[key={self.value},left_child={self.children[0]},right_child={self.children[1]}]"
+
+
+
+class Vertex(object):
+    """Describes a vertex object in terms of a "key" and a
+    dictionary that indicates edges to neighboring vertices with
+    a specified weight.
+    """
+    
+    def __init__(self, key):
+        """Constructs a vertex with a key value and an empty dictionary 
+        in which we'll store other vertices to which this vertex is
+        connected.
+        """
+        self.id = key
+        self.connected_to = {}   # empty dictionary for neighboring vertices
+        self.color = 'white'
+        self.distance = 0
+        self.predecessor = None
+        self.discovery_time = 0     # discovery time
+        self.finish_time = 0        # finish time  
+    
+    def add_neighbor(self, neighbor_vertex, weight=0):
+        """Adds a reference to a neighboring Vertex object to the
+        dictionary, to which this vertex is connected by an edge. 
+        If a weight is not indicated, default weight is 0.
+        """
+        self.connected_to[neighbor_vertex] = weight
+    
+    def set_color(self, color):
+        self.color = color
+    
+    def get_color(self):
+        return self.color
+    
+    def set_distance(self, distance):
+        self.distance = distance
+    
+    def get_distance(self):
+        return self.distance
+    
+    def set_predecessor(self, predecessor):
+        self.predecessor = predecessor
+    
+    def get_predecessor(self):
+        return self.predecessor
+    
+    def set_discovery(self, discovery_time):
+        self.discovery_time = discovery_time
+    
+    def get_discovery(self):
+        return self.discovery_time
+    
+    def set_finish(self, finish_time):
+        self.finish_time = finish_time
+    
+    def get_finish(self):
+        return self.finish_time
+    
+    def __repr__(self):
+        """Returns a representation of the vertex and its neighbors,
+        suitable for printing. Check out the example of 'list
+        comprehension' here!
+        """
+        return 'Vertex[id=' + str(self.id) \
+                + ',color=' + self.color \
+                + ',dist=' + str(self.distance) \
+                + ',pred=' + str(self.predecessor) \
+                + ',disc=' + str(self.discovery_time) \
+                + ',fin=' + str(self.finish_time) \
+              + '] connected_to: ' + str([x.id for x in self.connected_to]) 
+    
+    def get_connections(self):
+        """Returns the keys of the vertices we're connected to
+        """
+        return self.connected_to.keys()
+    
+    def get_id(self):
+        """Returns the id ("key") for this vertex
+        """
+        return self.id
+    
+    def get_weight(self, neighbor_vertex):
+        """Returns the weight of an edge connecting this vertex 
+        with another.
+        """
+        return self.connected_to[neighbor_vertex]
+
+class Graph:
+    def __init__(self) -> None:
         
+        self.graph = {}
+    def add_edge(self, from_vertex, to_vertex, weight=0):
+        if from_vertex not in self.graph:
+            self.add_vertex(from_vertex)
+        if to_vertex not in self.graph:
+            self.add_vertex(to_vertex)
+        self.graph[from_vertex].add_neighbor(self.graph[to_vertex], weight)
+    def add_vertex(self, key):
+        new_vertex = Vertex(key)
+        self.graph[key] = new_vertex
+        return new_vertex
+    def get_vertex(self, key):
+        return self.graph.get(key)
+    def __contains__(self, key):
+        return key in self.graph
+    def __iter__(self):
+        return iter(self.graph.values())
+
+    
+
